@@ -11,7 +11,7 @@ const Layout = () => {
   // Show welcome toast when layout mounts - just for demonstration
   useEffect(() => {
     toast({
-      title: "Welcome to CropWise AI",
+      title: "Welcome to AgriVerse",
       description: "Your crop disease management dashboard is ready",
     });
   }, []);
@@ -27,7 +27,7 @@ const Layout = () => {
         </main>
         
         <footer className="border-t p-4 text-center text-sm text-gray-500">
-          © 2025 CropWise AI Guardian. All rights reserved.
+          © 2025 AgriVerse. All rights reserved.
         </footer>
       </div>
     </div>

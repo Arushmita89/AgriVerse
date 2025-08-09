@@ -28,7 +28,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
           <Menu />
           <span className="sr-only">Toggle sidebar</span>
         </Button>
-        <h1 className="text-lg font-semibold text-green-900">AgriVerse</h1>
+        <h1 className="text-lg font-semibold text-green-900 font-dm-serif">AgriVerse</h1>
       </div>
       
       <div className="flex items-center space-x-2">

@@ -142,9 +142,8 @@ const DiseaseDetection = () => {
           </CardHeader>
           <CardContent>
             <div
-              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${
-                isDragOver ? "border-green-500 bg-green-50" : "border-gray-300"
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${isDragOver ? "border-green-500 bg-green-50" : "border-gray-300"
+                }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -229,17 +228,17 @@ const DiseaseDetection = () => {
               Disease detection and treatment recommendations
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center py-10">
+          <CardContent className="flex flex-col justify-center items-center text-center py-10 min-h-[150px]">
             {isAnalyzing ? (
-              <div className="animate-pulse space-y-4">
+              <div className="animate-pulse space-y-4 w-full max-w-xs">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
                 <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
                 <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
               </div>
             ) : uploadedImage ? (
-              <div>
+              <div className="flex flex-col justify-center items-center text-center">
                 <h3 className="text-lg font-medium mb-2">{predictionResult ?? "No prediction yet"}</h3>
-                {/* You can customize treatment recommendations here based on predicted class */}
+                {/* You can add treatment recommendations here */}
               </div>
             ) : (
               <p className="text-gray-500">
@@ -247,6 +246,8 @@ const DiseaseDetection = () => {
               </p>
             )}
           </CardContent>
+
+
         </Card>
       </div>
     </div>

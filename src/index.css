@@ -98,4 +98,9 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .font-dm-serif {
+  font-family: 'DM Serif Display', sans-serif;
+  }
 }
+
