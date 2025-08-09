@@ -8,6 +8,7 @@ const DiseaseDetection = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [predictionResult, setPredictionResult] = useState<string | null>(null);
+  const [advice, setAdvice] = useState<string | null>(null);
   const [scanCount, setScanCount] = useState(() => {
     const saved = localStorage.getItem("scanCount");
     return saved ? Number(saved) : 0;
@@ -64,6 +65,7 @@ const DiseaseDetection = () => {
     reader.onload = (e) => {
       setUploadedImage(e.target?.result as string);
       setPredictionResult(null);
+      setAdvice(null);
     };
     reader.readAsDataURL(file);
   };
@@ -93,6 +95,7 @@ const DiseaseDetection = () => {
       const data = await res.json();
 
       setPredictionResult(data.prediction);
+      setAdvice(data.advice ?? null);
 
       addDetectionToHistory(data.prediction, data.prediction.toLowerCase().includes('healthy'));
 
@@ -125,9 +128,8 @@ const DiseaseDetection = () => {
           </CardHeader>
           <CardContent>
             <div
-              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${
-                isDragOver ? "border-green-500 bg-green-50" : "border-gray-300"
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${isDragOver ? "border-green-500 bg-green-50" : "border-gray-300"
+                }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -136,7 +138,7 @@ const DiseaseDetection = () => {
                 <div className="space-y-4 w-full">
                   <img src={uploadedImage} alt="Uploaded plant" className="max-h-[200px] mx-auto rounded-md" />
                   <div className="text-center">
-                    <Button onClick={() => { setUploadedImage(null); setPredictionResult(null); }} variant="outline">
+                    <Button onClick={() => { setUploadedImage(null); setPredictionResult(null); setAdvice(null); }} variant="outline">
                       Remove Image
                     </Button>
                   </div>
@@ -182,8 +184,29 @@ const DiseaseDetection = () => {
               </div>
             ) : uploadedImage ? (
               <div className="flex flex-col justify-center items-center text-center">
-                <h3 className="text-lg font-medium mb-2">{predictionResult ?? "No prediction yet"}</h3>
+                <h3
+                  style={{
+                    color: predictionResult
+                      ? predictionResult.toLowerCase().includes("healthy")
+                        ? "green"
+                        : "red"
+                      : "gray",
+                    fontWeight: "700",
+                    fontSize: "24px",
+                    fontFamily: "Arial, sans-serif",
+                  }}
+                  className="mb-2"
+                >
+                  {predictionResult ?? "No prediction yet"}
+                </h3>
+
+                {advice && (
+                  <p className="text-md text-gray-700 max-w-md">
+                    {advice}
+                  </p>
+                )}
               </div>
+
             ) : (
               <p className="text-gray-500">Upload an image to see analysis results here</p>
             )}

@@ -11,7 +11,6 @@ import Dashboard from "./pages/Dashboard";
 import DiseaseDetection from "./pages/DiseaseDetection";
 import DiseasePrediction from "./pages/DiseasePrediction";
 import DiseaseLibrary from "./pages/DiseaseLibrary";
-import * as tmImage from '@teachablemachine/image';
 
 const queryClient = new QueryClient();
 

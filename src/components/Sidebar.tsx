@@ -120,7 +120,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                   className="w-full h-full justify-center object-center border border-green-900 rounded-full object-fill"
                 />
               </div>
-              <span className="font-bold text-lg border-1 text-green-900">
+              <span className="font-bold text-lg border-1 text-green-900 font-dm-serif">
                 AgriVerse
               </span>
             </Link>
@@ -153,18 +153,24 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             ))}
           </nav>
 
-          {/* <div className="p-4 border-t hidden md:block">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-between"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
-            >
-              <span>{isOpen ? "Collapse" : "Expand"}</span>
-              {isOpen ? <ArrowLeft size={16} /> : <ArrowRight size={16} />}
-            </Button>
-          </div> */}
+          {/*isOpen && (
+            <div className="p-4 border-t hidden md:block">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-between"
+                onClick={() => setIsOpen(false)}
+                aria-label="Collapse sidebar"
+              >
+                <span>Collapse</span>
+                <ArrowLeft size={16} />
+              </Button>
+            </div>
+          )*/}
+
+
+
+
         </div>
       </aside>
     </>

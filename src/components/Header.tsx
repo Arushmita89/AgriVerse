@@ -1,5 +1,4 @@
-
-import { Bell, Menu, User } from "lucide-react";
+import { Bell, Menu, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
@@ -19,18 +18,20 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
   return (
     <header className="border-b bg-white p-4 flex items-center justify-between">
       <div className="flex items-center">
+        {/* Sidebar toggle button - visible on all screens */}
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden mr-2"
+          className="mr-2"
           onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
         >
-          <Menu />
-          <span className="sr-only">Toggle sidebar</span>
+          {sidebarOpen ? <ArrowRight className="rotate-180" /> : <Menu />}
         </Button>
+
         <h1 className="text-lg font-semibold text-green-900 font-dm-serif">AgriVerse</h1>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <Button variant="ghost" size="icon" onClick={handleNotificationClick}>
           <Bell className="h-5 w-5" />

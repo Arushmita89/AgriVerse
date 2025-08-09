@@ -5,11 +5,12 @@ import numpy as np
 import json
 import io
 from flask_cors import CORS
+from disease_info import disease_info  
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS so your React app can call the API
+CORS(app) 
 
-# Load model & classes once
+# Load model & classes 
 model = load_model('plant_disease_model.keras')
 with open('class_indices.json', 'r') as f:
     class_indices = json.load(f)
@@ -31,7 +32,17 @@ def predict():
     preds = model.predict(x)
     pred_class_idx = np.argmax(preds, axis=1)[0]
     result = labels[pred_class_idx]
-    return jsonify({'prediction': result})
+
+    #name and advice
+    info = disease_info.get(result, {
+        "name": result,
+        "advice": "No advice available for this disease."
+    })
+
+    return jsonify({
+        "prediction": info["name"],
+        "advice": info["advice"]
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

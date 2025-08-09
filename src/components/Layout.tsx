@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
@@ -19,13 +18,14 @@ const Layout = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-      
+
       <div className="flex-1 flex flex-col">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
         <main className="flex-1 p-4 md:p-6 overflow-auto">
           <Outlet />
         </main>
-        
+
         <footer className="border-t p-4 text-center text-sm text-gray-500">
           © 2025 AgriVerse. All rights reserved.
         </footer>
