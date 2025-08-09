@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Clock } from "lucide-react";
 
 interface DetectionEntry {
@@ -10,15 +16,23 @@ interface DetectionEntry {
   timestamp: string;
 }
 
-const CircleProgress = ({ percentage = 85, size = 120, strokeWidth = 12 }) => {
+const CircleProgress = ({
+  percentage = 85,
+  size = 140,
+  strokeWidth = 14,
+}: {
+  percentage?: number;
+  size?: number;
+  strokeWidth?: number;
+}) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <svg width={size} height={size} className="mx-auto">
+    <svg width={size} height={size} className="mx-auto drop-shadow-lg">
       <circle
-        stroke="#d1fae5"
+        stroke="rgba(34,197,94,0.2)" // Tailwind green-500 with opacity
         fill="transparent"
         strokeWidth={strokeWidth}
         r={radius}
@@ -26,7 +40,7 @@ const CircleProgress = ({ percentage = 85, size = 120, strokeWidth = 12 }) => {
         cy={size / 2}
       />
       <motion.circle
-        stroke="#16a34a" // green-700
+        stroke="#fcfcfc" // Tailwind green-500 bright
         fill="transparent"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
@@ -37,15 +51,16 @@ const CircleProgress = ({ percentage = 85, size = 120, strokeWidth = 12 }) => {
         strokeDashoffset={circumference}
         animate={{ strokeDashoffset: offset }}
         transition={{ duration: 1.5, ease: "easeOut" }}
+        style={{ filter: "drop-shadow(0 0 6px #22c55e)" }}
       />
       <text
         x="50%"
         y="50%"
         dy="0.3em"
         textAnchor="middle"
-        fontSize="2rem"
-        fill="#15803d" // green-700 darker
-        className="font-bold font-poppins"
+        fontSize="2.5rem"
+        fill="#15803d"
+        className="font-bold font-poppins select-none drop-shadow-md"
       >
         {percentage}%
       </text>
@@ -73,122 +88,177 @@ const Dashboard = () => {
   };
 
   const diseaseCount = detectionHistory.filter((d) => !d.isHealthy).length;
-  const averageHealthScore = 85; // replace with real logic if available
+  const averageHealthScore = 85; // TODO: dynamic value
 
   return (
-    <div className="space-y-6 font-inter text-gray-700 bg-gray-50 min-h-screen px-4 py-6">
-      <div className="flex items-center justify-between font-poppins text-gray-900">
-        <h1 className="text-3xl font-extrabold tracking-tight">Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-6 py-8 font-inter text-gray-800">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-10 font-poppins text-green-900 gap-4 select-none">
+        <h1 className="text-4xl font-extrabold tracking-wide drop-shadow-md">
+          🌿 Dashboard
+        </h1>
         <Badge
           variant="outline"
-          className="bg-green-100 text-green-700 flex items-center gap-1 animate-pulse rounded-md px-3 py-1"
+          className="bg-green-200 text-green-900 flex items-center gap-2 animate-pulse rounded-lg px-4 py-2 shadow-md"
         >
-          <Clock className="w-5 h-5" />
+          <Clock className="w-6 h-6" />
           Last updated: Today
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         {/* Active Scans */}
         <motion.div
-          whileHover={{ scale: 1.03, boxShadow: "0 15px 30px rgba(22,163,74,0.25)" }}
-          transition={{ type: "spring", stiffness: 300 }}
-          className="cursor-pointer"
-          style={{
-            boxShadow: "0 15px 30px rgba(22,163,74,0)", // reserve shadow space but transparent initially
+          whileHover={{
+            scale: 1.06,
+            boxShadow:
+              "0 25px 50px -12px rgba(34,197,94,0.6), 0 10px 20px -10px rgba(34,197,94,0.4)",
+            backgroundColor: "#d1fae5",
           }}
+          transition={{ type: "spring", stiffness: 300 }}
+          className="cursor-pointer rounded-3xl"
         >
-          <Card className="transition-transform rounded-xl border border-green-200 shadow-sm bg-white min-h-[250px]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold text-green-800 uppercase tracking-wide">
+          <Card className="flex flex-col justify-around items-center text-center transition-transform rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[300px] text-white px-6">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg">
                 Active Scans
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-extrabold text-green-700">{activeScans}</div>
-              <div className="w-full bg-green-100 rounded-full h-4 mt-3 overflow-hidden">
+            <CardContent className="flex flex-col items-center">
+              <motion.div
+                className="text-5xl font-extrabold drop-shadow-lg select-none"
+                key={activeScans}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {activeScans}
+              </motion.div>
+              <div className="w-full bg-green-700 rounded-full h-5 mt-5 overflow-hidden shadow-inner shadow-green-900/30">
                 <motion.div
-                  className="bg-green-600 h-4 rounded-full"
+                  className="bg-white h-5 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(activeScans * 10, 100)}%` }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
+                  style={{ filter: "drop-shadow(0 0 8px white)" }}
                 />
               </div>
-              <p className="text-xs text-green-600 font-medium mt-1">Active</p>
+              <p className="text-xs font-medium mt-3 tracking-wider drop-shadow-md select-none">
+                Scans completed successfully
+              </p>
             </CardContent>
           </Card>
+
         </motion.div>
 
         {/* Disease Alerts */}
         <motion.div
-          whileHover={{ scale: 1.03, boxShadow: "0 15px 30px rgba(217,119,6,0.25)" }}
+          whileHover={{
+            scale: 1.06,
+            boxShadow:
+              "0 25px 50px -12px rgba(245,158,11,0.7), 0 10px 20px -10px rgba(245,158,11,0.5)",
+            backgroundColor: "#fef3c7",
+          }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="cursor-pointer"
+          className="cursor-pointer rounded-3xl"
         >
-          <Card className="transition-transform rounded-xl border border-amber-300 shadow-sm bg-white min-h-[250px]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold text-amber-700 uppercase tracking-wide">
+          <Card className="flex flex-col justify-around items-center text-center transition-transform rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-amber-300 via-amber-400 to-amber-500 min-h-[300px] text-white px-6">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg">
                 Disease Alerts
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-extrabold text-amber-600">{diseaseCount}</div>
-              <div className="w-full bg-amber-100 rounded-full h-4 mt-3 overflow-hidden">
+            <CardContent className="flex flex-col items-center">
+              <motion.div
+                className="text-5xl font-extrabold drop-shadow-lg select-none"
+                key={diseaseCount}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {diseaseCount}
+              </motion.div>
+              <div className="w-full bg-amber-700 rounded-full h-5 mt-5 overflow-hidden shadow-inner shadow-amber-900/30">
                 <motion.div
-                  className="bg-amber-600 h-4 rounded-full"
+                  className="bg-white h-5 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(diseaseCount * 10, 100)}%` }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
+                  style={{ filter: "drop-shadow(0 0 8px white)" }}
                 />
               </div>
-              <p className="text-xs text-amber-700 font-medium mt-1">Requires attention</p>
+              <p className="text-xs font-medium mt-3 tracking-wider drop-shadow-md select-none">
+                Issues detected, immediate action required
+              </p>
             </CardContent>
           </Card>
+
         </motion.div>
 
         {/* Average Health Score */}
         <motion.div
-          whileHover={{ scale: 1.03, boxShadow: "0 15px 30px rgba(22,163,74,0.25)" }}
+          whileHover={{
+            scale: 1.06,
+            boxShadow:
+              "0 25px 50px -12px rgba(34,197,94,0.6), 0 10px 20px -10px rgba(34,197,94,0.4)",
+            backgroundColor: "#d1fae5",
+          }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="cursor-pointer"
+          className="cursor-pointer rounded-3xl"
         >
-          <Card className="transition-transform rounded-xl border border-green-200 shadow-sm bg-white min-h-[250px]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold text-green-800 uppercase tracking-wide">
+          <Card className="flex flex-col justify-around text-center items-center transition-transform rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[300px] text-white px-6">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg select-none">
                 Average Health Score
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center">
               <CircleProgress percentage={averageHealthScore} />
-              <p className="mt-2 text-sm text-green-700 font-semibold">+2% from last week</p>
+              <motion.p
+                className="mt-4 text-lg font-semibold drop-shadow-md select-none"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                +2% from last week
+              </motion.p>
             </CardContent>
           </Card>
+
         </motion.div>
       </div>
 
-      {/* Recent Activity Section */}
-      <Card className="rounded-xl border border-gray-200 shadow-sm bg-white">
+      {/* Recent Activity */}
+      <Card className="rounded-3xl border border-gray-300 shadow-lg bg-white max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="font-poppins text-xl font-extrabold text-gray-900">
-            Recent Activity
+          <CardTitle className="font-poppins text-2xl font-extrabold text-gray-900 drop-shadow-sm select-none">
+            📜 Recent Activity
           </CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-gray-700 select-none">
             Latest disease detections from your fields
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100">
+          <div className="space-y-4 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-100 rounded-md px-2">
             {detectionHistory.length === 0 ? (
-              <p className="text-gray-500 font-inter">No recent detections yet.</p>
+              <p className="text-gray-500 font-inter select-none text-center py-12">
+                No recent detections yet.
+              </p>
             ) : (
               detectionHistory.map(({ result, isHealthy, timestamp }, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="flex items-center justify-between border-b border-gray-200 pb-2"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="flex items-center justify-between border-b border-gray-200 pb-3 last:border-none"
                 >
                   <div>
-                    <p className="font-medium text-gray-800 font-poppins">{result}</p>
-                    <p className="text-sm text-gray-500 font-inter">{formatDate(timestamp)}</p>
+                    <p className="font-medium text-gray-900 font-poppins">{result}</p>
+                    <p className="text-sm text-gray-500 font-inter">
+                      {formatDate(timestamp)}
+                    </p>
                   </div>
                   <Badge
                     variant={isHealthy ? "outline" : "destructive"}
@@ -200,7 +270,7 @@ const Dashboard = () => {
                   >
                     {isHealthy ? "Healthy" : "Diseased"}
                   </Badge>
-                </div>
+                </motion.div>
               ))
             )}
           </div>

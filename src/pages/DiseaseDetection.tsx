@@ -1,7 +1,15 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { UploadCloud, XCircle, Loader2 } from "lucide-react";
 
 const DiseaseDetection = () => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -24,7 +32,7 @@ const DiseaseDetection = () => {
       isHealthy,
       timestamp: new Date().toISOString(),
     });
-    if (historyArray.length > 10) historyArray.pop(); // keep max 10 records
+    if (historyArray.length > 10) historyArray.pop();
     localStorage.setItem("detectionHistory", JSON.stringify(historyArray));
   };
 
@@ -75,16 +83,14 @@ const DiseaseDetection = () => {
     setIsAnalyzing(true);
 
     try {
-      // Convert base64 image URL to Blob
       const response = await fetch(uploadedImage);
       const blob = await response.blob();
 
       const formData = new FormData();
-      formData.append('file', blob, 'uploaded_image.jpg');
+      formData.append("file", blob, "uploaded_image.jpg");
 
-      // Call backend API (make sure backend is running on localhost:5000)
-      const res = await fetch('http://localhost:5000/predict', {
-        method: 'POST',
+      const res = await fetch("http://localhost:5000/predict", {
+        method: "POST",
         body: formData,
       });
 
@@ -97,9 +103,12 @@ const DiseaseDetection = () => {
       setPredictionResult(data.prediction);
       setAdvice(data.advice ?? null);
 
-      addDetectionToHistory(data.prediction, data.prediction.toLowerCase().includes('healthy'));
+      addDetectionToHistory(
+        data.prediction,
+        data.prediction.toLowerCase().includes("healthy")
+      );
 
-      setScanCount(prev => {
+      setScanCount((prev) => {
         const newCount = prev + 1;
         localStorage.setItem("scanCount", newCount.toString());
         return newCount;
@@ -117,99 +126,174 @@ const DiseaseDetection = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Disease Detection</h1>
+    <div className="space-y-8 max-w-5xl mx-auto px-6 py-8 bg-gradient-to-tr from-green-50 to-green-100 rounded-xl shadow-lg">
+      <h1 className="text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md mb-8">
+        Disease Detection
+      </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* Upload Section */}
+        <Card
+          className={`rounded-xl border-2 shadow-md transition-colors duration-300 cursor-pointer
+            ${isDragOver ? "border-green-700 bg-green-50 shadow-xl" : "border-green-300 bg-white"}
+          `}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && fileInputRef.current?.click()}
+        >
           <CardHeader>
-            <CardTitle>Upload Plant Image</CardTitle>
-            <CardDescription>Take or upload a clear photo of the affected plant part</CardDescription>
+            <CardTitle className="text-lg font-semibold text-green-800 flex items-center gap-2">
+              <UploadCloud className="w-6 h-6" /> Upload Plant Image
+            </CardTitle>
+            <CardDescription className="text-green-600">
+              Take or upload a clear photo of the affected plant part
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div
-              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center transition-colors ${isDragOver ? "border-green-500 bg-green-50" : "border-gray-300"
-                }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              {uploadedImage ? (
-                <div className="space-y-4 w-full">
-                  <img src={uploadedImage} alt="Uploaded plant" className="max-h-[200px] mx-auto rounded-md" />
-                  <div className="text-center">
-                    <Button onClick={() => { setUploadedImage(null); setPredictionResult(null); setAdvice(null); }} variant="outline">
-                      Remove Image
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  <p className="text-sm text-gray-600 mb-2">Drag and drop an image here, or click to select</p>
 
-                  <input type="file" accept="image/*" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileInput} />
-                  <Button variant="default" type="button" onClick={() => fileInputRef.current?.click()}>
-                    Select Image
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            {uploadedImage ? (
+              <motion.div
+                key="image-uploaded"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="space-y-4 w-full"
+              >
+                <img
+                  src={uploadedImage}
+                  alt="Uploaded plant"
+                  className="max-h-[240px] mx-auto rounded-md object-contain shadow-lg"
+                />
+                <div className="flex justify-center">
+                  <Button
+                    variant="destructive"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setUploadedImage(null);
+                      setPredictionResult(null);
+                      setAdvice(null);
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <XCircle />
+                    Remove Image
                   </Button>
-                </>
-              )}
-            </div>
-
-            {uploadedImage && (
-              <div className="mt-4">
-                <Button className="w-full" disabled={isAnalyzing} onClick={analyzeImage}>
-                  {isAnalyzing ? "Analyzing..." : "Analyze Image"}
+                </div>
+              </motion.div>
+            ) : (
+              <>
+                <p className="text-center text-green-600 mb-4 select-none">
+                  Drag & drop an image here, or click to select
+                </p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileInput}
+                />
+                <Button variant="outline" size="lg">
+                  Select Image
                 </Button>
-              </div>
+              </>
             )}
-
-            <p className="mt-4 text-sm text-muted-foreground">Scans done: {scanCount}</p>
           </CardContent>
+
+          {uploadedImage && (
+            <div className="p-6 pt-0">
+              <Button
+                className="w-full flex items-center justify-center gap-2"
+                disabled={isAnalyzing}
+                onClick={analyzeImage}
+                variant={isAnalyzing ? "disabled" : "default"}
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Loader2 className="animate-spin w-5 h-5" />
+                    Analyzing...
+                  </>
+                ) : (
+                  "Analyze Image"
+                )}
+              </Button>
+              <p className="mt-4 text-center text-green-700 font-semibold select-none">
+                Scans done: {scanCount}
+              </p>
+            </div>
+          )}
         </Card>
 
-        <Card>
+        {/* Results Section */}
+        <Card className="rounded-xl border-2 border-green-700 shadow-md bg-white flex flex-col">
           <CardHeader>
-            <CardTitle>Analysis Results</CardTitle>
-            <CardDescription>Disease detection and treatment recommendations</CardDescription>
+            <CardTitle className="text-lg font-semibold text-green-800">
+              Analysis Results
+            </CardTitle>
+            <CardDescription className="text-green-600">
+              Disease detection and treatment recommendations
+            </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col justify-center items-center text-center py-10 min-h-[150px]">
-            {isAnalyzing ? (
-              <div className="animate-pulse space-y-4 w-full max-w-xs">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
-              </div>
-            ) : uploadedImage ? (
-              <div className="flex flex-col justify-center items-center text-center">
-                <h3
-                  style={{
-                    color: predictionResult
-                      ? predictionResult.toLowerCase().includes("healthy")
-                        ? "green"
-                        : "red"
-                      : "gray",
-                    fontWeight: "700",
-                    fontSize: "24px",
-                    fontFamily: "Arial, sans-serif",
-                  }}
-                  className="mb-2"
+
+          <CardContent className="flex flex-col justify-center items-center text-center py-20 min-h-[240px]">
+            <AnimatePresence mode="wait">
+              {isAnalyzing ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="animate-pulse space-y-4 w-full max-w-xs"
                 >
-                  {predictionResult ?? "No prediction yet"}
-                </h3>
+                  <div className="h-6 bg-green-200 rounded w-3/4 mx-auto"></div>
+                  <div className="h-6 bg-green-200 rounded w-1/2 mx-auto"></div>
+                  <div className="h-6 bg-green-200 rounded w-2/3 mx-auto"></div>
+                </motion.div>
+              ) : uploadedImage ? (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="flex flex-col justify-center items-center text-center max-w-md px-6"
+                >
+                  <h3
+                    style={{
+                      color: predictionResult
+                        ? predictionResult.toLowerCase().includes("healthy")
+                          ? "#15803d"
+                          : "#b91c1c"
+                        : "#6b7280",
+                      fontWeight: "700",
+                      fontSize: "30px",
+                      fontFamily: "'Poppins', sans-serif",
+                    }}
+                    className="mb-4"
+                  >
+                    {predictionResult ?? "No prediction yet"}
+                  </h3>
 
-                {advice && (
-                  <p className="text-md text-gray-700 max-w-md">
-                    {advice}
-                  </p>
-                )}
-              </div>
-
-            ) : (
-              <p className="text-gray-500">Upload an image to see analysis results here</p>
-            )}
+                  {advice && (
+                    <p className="text-green-900/90 whitespace-pre-wrap leading-relaxed font-medium">
+                      {advice}
+                    </p>
+                  )}
+                </motion.div>
+              ) : (
+                <motion.p
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-green-600 font-medium select-none"
+                >
+                  Upload an image to see analysis results here
+                </motion.p>
+              )}
+            </AnimatePresence>
           </CardContent>
         </Card>
       </div>
