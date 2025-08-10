@@ -145,7 +145,7 @@ const Dashboard = () => {
 
     const updateAverageHealthScore = (history: DetectionEntry[]) => {
       if (history.length === 0) {
-        setAverageHealthScore(85);
+        setAverageHealthScore(0);
         return;
       }
       const healthyCount = history.filter((d) => d.isHealthy).length;

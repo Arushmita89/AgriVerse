@@ -2,6 +2,9 @@ import { Bell, Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { auth } from "../firebaseConfig"; // adjust path if needed
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -10,12 +13,39 @@ interface HeaderProps {
 
 const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Subscribe to auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleNotificationClick = () => {
     toast({
       title: "Notifications",
       description: "You have no new notifications",
     });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "Logged out",
+        description: "You have successfully logged out.",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: "An error occurred during logout.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -43,21 +73,42 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
           <Bell className="h-5 w-5" />
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={() => navigate("/login")}
-          className="text-green-600 border-green-600 hover:bg-green-50"
-        >
-          Login
-        </Button>
+        {user ? (
+          <>
+            <Button
+              variant="outline"
+              className="text-green-600 border-green-600 cursor-default"
+              disabled
+            >
+              {user.displayName || user.email}
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleLogout}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Log Out
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/login")}
+              className="text-green-600 border-green-600 hover:bg-green-50"
+            >
+              Login
+            </Button>
 
-        <Button
-          variant="default"
-          onClick={() => navigate("/signup")}
-          className="bg-green-600 hover:bg-green-700"
-        >
-          Sign Up
-        </Button>
+            <Button
+              variant="default"
+              onClick={() => navigate("/signup")}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Sign Up
+            </Button>
+          </>
+        )}
       </div>
     </header>
   );

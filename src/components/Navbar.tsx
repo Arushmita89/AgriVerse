@@ -2,6 +2,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { auth } from "../firebaseConfig"; // adjust path if needed
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 
 const routes = [
   {
@@ -89,8 +92,29 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleNotificationClick = () => {
     alert("No new notifications.");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      //alert("Logged out successfully.");
+      navigate("/login");
+    } catch (error) {
+      //alert("Logout failed.");
+      console.error(error);
+    }
   };
 
   return (
@@ -133,21 +157,42 @@ const Navbar = () => {
           <Bell className="h-5 w-5" />
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={() => navigate("/login")}
-          className="text-green-600 border-green-600 hover:bg-green-50"
-        >
-          Login
-        </Button>
+        {user ? (
+          <>
+            <Button
+              variant="outline"
+              className="text-green-600 border-green-600 cursor-default"
+              disabled
+            >
+              {user.displayName || user.email}
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleLogout}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Log Out
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/login")}
+              className="text-green-600 border-green-600 hover:bg-green-50"
+            >
+              Login
+            </Button>
 
-        <Button
-          variant="default"
-          onClick={() => navigate("/signup")}
-          className="bg-green-600 hover:bg-green-700"
-        >
-          Sign Up
-        </Button>
+            <Button
+              variant="default"
+              onClick={() => navigate("/signup")}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Sign Up
+            </Button>
+          </>
+        )}
       </div>
     </nav>
   );
