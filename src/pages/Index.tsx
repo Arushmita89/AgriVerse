@@ -2,7 +2,7 @@ import { ArrowRight, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navar";
+import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 
 const cardVariants = {
