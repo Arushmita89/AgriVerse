@@ -5,7 +5,6 @@ from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.models import Model
 import json
 
-# Change this path if your dataset folder location is different
 dataset_dir = './PlantVillage'  
 
 IMG_SIZE = 160
@@ -39,11 +38,10 @@ val_gen = datagen.flow_from_directory(
     shuffle=False,
 )
 
-# Save class indices for later use in React app
 with open('class_indices.json', 'w') as f:
     json.dump(train_gen.class_indices, f)
 
-# Load pretrained MobileNetV2 base model
+
 base_model = MobileNetV2(input_shape=(IMG_SIZE, IMG_SIZE, 3),
                          include_top=False,
                          weights='imagenet')
@@ -62,7 +60,6 @@ model.compile(optimizer='adam',
 
 print(model.summary())
 
-# Train model (start with 5 epochs)
 epochs = 2
 
 model.fit(
@@ -71,5 +68,4 @@ model.fit(
     epochs=epochs
 )
 
-# Save trained model
 model.save('plant_disease_model.keras')
