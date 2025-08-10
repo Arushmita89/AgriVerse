@@ -1,4 +1,4 @@
-// src/services/authService.ts
+
 import { auth } from "@/firebaseConfig";
 import {
   createUserWithEmailAndPassword,

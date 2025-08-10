@@ -11,8 +11,14 @@ import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, XCircle, Loader2 } from "lucide-react";
 
-import { auth, db } from "../firebaseConfig"; 
+import { auth, db } from "../firebaseConfig";
 import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+
+interface DetectionEntry {
+  result: string;
+  isHealthy: boolean;
+  timestamp: string;
+}
 
 const DiseaseDetection = () => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -24,12 +30,11 @@ const DiseaseDetection = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch scanCount from Firestore (or localStorage fallback) on mount
+  // Fetch scanCount and detectionHistory 
   useEffect(() => {
     const fetchScanCount = async () => {
       const user = auth.currentUser;
       if (!user) {
-        // No user logged in, fallback to localStorage
         const saved = localStorage.getItem("scanCount");
         setScanCount(saved ? Number(saved) : 0);
         return;
@@ -43,13 +48,11 @@ const DiseaseDetection = () => {
           const data = userDocSnap.data();
           setScanCount(data.scanCount ?? 0);
         } else {
-          // If no document, initialize scanCount
-          await setDoc(userDocRef, { scanCount: 0 });
+          await setDoc(userDocRef, { scanCount: 0, detectionHistory: [] });
           setScanCount(0);
         }
       } catch (error) {
         console.error("Failed to fetch scan count:", error);
-        // fallback localStorage
         const saved = localStorage.getItem("scanCount");
         setScanCount(saved ? Number(saved) : 0);
       }
@@ -58,7 +61,7 @@ const DiseaseDetection = () => {
     fetchScanCount();
   }, []);
 
-  const addDetectionToHistory = (result: string, isHealthy: boolean) => {
+  const addDetectionToLocalHistory = (result: string, isHealthy: boolean) => {
     const existingHistory = localStorage.getItem("detectionHistory");
     const historyArray = existingHistory ? JSON.parse(existingHistory) : [];
     historyArray.unshift({
@@ -117,7 +120,6 @@ const DiseaseDetection = () => {
     setIsAnalyzing(true);
 
     try {
-      // Fetch image blob from base64 string
       const response = await fetch(uploadedImage);
       const blob = await response.blob();
 
@@ -138,22 +140,42 @@ const DiseaseDetection = () => {
       setPredictionResult(data.prediction);
       setAdvice(data.advice ?? null);
 
-      addDetectionToHistory(
-        data.prediction,
-        data.prediction.toLowerCase().includes("healthy")
-      );
+      const isHealthy = data.prediction.toLowerCase().includes("healthy");
+      addDetectionToLocalHistory(data.prediction, isHealthy);
 
-      // Update scanCount in Firestore or localStorage
+      // Update detectionHistory and scanCount
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
-        const newCount = scanCount + 1;
-        await updateDoc(userDocRef, { scanCount: newCount });
-        setScanCount(newCount);
+
+        const userDocSnap = await getDoc(userDocRef);
+        let currentHistory: DetectionEntry[] = [];
+        let currentScanCount = scanCount;
+
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+          currentHistory = data.detectionHistory ?? [];
+          currentScanCount = data.scanCount ?? scanCount;
+        }
+
+        const newEntry: DetectionEntry = {
+          result: data.prediction,
+          isHealthy,
+          timestamp: new Date().toISOString(),
+        };
+
+        const updatedHistory = [newEntry, ...currentHistory].slice(0, 10);
+
+        await updateDoc(userDocRef, {
+          scanCount: currentScanCount + 1,
+          detectionHistory: updatedHistory,
+        });
+
+        setScanCount(currentScanCount + 1);
       } else {
-        // Fallback to localStorage
+        // Fallback localStorage
         setScanCount((prev) => {
-          const newCount = prev + 1;
+          const newCount = (prev || 0) + 1;
           localStorage.setItem("scanCount", newCount.toString());
           return newCount;
         });

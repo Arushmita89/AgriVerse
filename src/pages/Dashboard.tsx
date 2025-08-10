@@ -7,8 +7,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
+
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface DetectionEntry {
   result: string;
@@ -32,7 +35,7 @@ const CircleProgress = ({
   return (
     <svg width={size} height={size} className="mx-auto drop-shadow-lg">
       <circle
-        stroke="rgba(34,197,94,0.2)" // Tailwind green-500 with opacity
+        stroke="rgba(34,197,94,0.2)"
         fill="transparent"
         strokeWidth={strokeWidth}
         r={radius}
@@ -40,7 +43,7 @@ const CircleProgress = ({
         cy={size / 2}
       />
       <motion.circle
-        stroke="#fcfcfc" // Tailwind green-500 bright
+        stroke="#fcfcfc"
         fill="transparent"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
@@ -71,15 +74,86 @@ const CircleProgress = ({
 const Dashboard = () => {
   const [activeScans, setActiveScans] = useState(0);
   const [detectionHistory, setDetectionHistory] = useState<DetectionEntry[]>([]);
+  const [averageHealthScore, setAverageHealthScore] = useState(85);
 
   useEffect(() => {
-    const scansCount = Number(localStorage.getItem("scanCount") || "0");
-    setActiveScans(scansCount);
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        // fallback to localStorage when no user found
+        const savedCount = localStorage.getItem("scanCount");
+        setActiveScans(savedCount ? Number(savedCount) : 0);
 
-    const existingHistory = localStorage.getItem("detectionHistory");
-    if (existingHistory) {
-      setDetectionHistory(JSON.parse(existingHistory));
-    }
+        const savedHistory = localStorage.getItem("detectionHistory");
+        if (savedHistory) {
+          const history = JSON.parse(savedHistory) as DetectionEntry[];
+          setDetectionHistory(history);
+          updateAverageHealthScore(history);
+        } else {
+          setDetectionHistory([]);
+          setAverageHealthScore(85);
+        }
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+
+          setActiveScans(data.scanCount ?? 0);
+
+          const historyRaw = data.detectionHistory ?? [];
+          // Map history entries
+          const history: DetectionEntry[] = historyRaw.map((item: any) => ({
+            result: item.result || "Unknown",
+            isHealthy: !!item.isHealthy,
+            timestamp: item.timestamp || new Date().toISOString(),
+          }));
+
+          setDetectionHistory(history);
+          updateAverageHealthScore(history);
+        } else {
+          await setDoc(doc(db, "users", user.uid), {
+            scanCount: 0,
+            detectionHistory: [],
+          });
+          setActiveScans(0);
+          setDetectionHistory([]);
+          setAverageHealthScore(85);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+
+        // fallback localStorage on error
+        const savedCount = localStorage.getItem("scanCount");
+        setActiveScans(savedCount ? Number(savedCount) : 0);
+
+        const savedHistory = localStorage.getItem("detectionHistory");
+        if (savedHistory) {
+          const history = JSON.parse(savedHistory) as DetectionEntry[];
+          setDetectionHistory(history);
+          updateAverageHealthScore(history);
+        } else {
+          setDetectionHistory([]);
+          setAverageHealthScore(85);
+        }
+      }
+    };
+
+    const updateAverageHealthScore = (history: DetectionEntry[]) => {
+      if (history.length === 0) {
+        setAverageHealthScore(85);
+        return;
+      }
+      const healthyCount = history.filter((d) => d.isHealthy).length;
+      const avgScore = Math.round((healthyCount / history.length) * 100);
+      setAverageHealthScore(avgScore);
+    };
+
+    fetchUserData();
   }, []);
 
   const formatDate = (isoString: string) => {
@@ -88,7 +162,6 @@ const Dashboard = () => {
   };
 
   const diseaseCount = detectionHistory.filter((d) => !d.isHealthy).length;
-  const averageHealthScore = 85; // TODO: dynamic value
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-6 py-8 font-inter text-gray-800 m-0">
@@ -149,7 +222,6 @@ const Dashboard = () => {
               </p>
             </CardContent>
           </Card>
-
         </motion.div>
 
         {/* Disease Alerts */}
@@ -193,7 +265,6 @@ const Dashboard = () => {
               </p>
             </CardContent>
           </Card>
-
         </motion.div>
 
         {/* Average Health Score */}
@@ -225,7 +296,6 @@ const Dashboard = () => {
               </motion.p>
             </CardContent>
           </Card>
-
         </motion.div>
       </div>
 

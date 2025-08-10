@@ -93,7 +93,7 @@ const DiseaseLibrary = () => {
     <div className="max-w-6xl mx-auto px-6 py-8 font-poppins text-gray-900">
       <h1 className="text-4xl font-extrabold mb-8 text-green-800 drop-shadow-md">🌿 Disease Library</h1>
 
-      {/* Search Input with icon */}
+      {/* Search Input */}
       <div className="relative mb-10 max-w-md mx-auto md:mx-0">
         <Search className="absolute top-3 left-3 text-green-600" />
         <input

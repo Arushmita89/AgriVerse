@@ -54,7 +54,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-white bg-opacity-10 backdrop-blur-[2px] rounded-b-3xl pointer-events-none"></div>
 
         <div className="relative z-10 max-w-4xl">
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-6 max-h-[500px]">
             <img
               src="logo.jpg"
               alt="AgriVerse Logo"
