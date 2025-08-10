@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -32,7 +32,21 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-200 via-green-300 to-green-400 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-200 via-green-300 to-green-400 px-4">
+      {/* AgriVerse */}
+      <Link to="/" className="flex items-center gap-2 border-green-900 mb-8">
+        <div className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold">
+          <img
+            src="logo.jpg"
+            alt="logo"
+            className="w-full h-full justify-center object-center border border-green-900 rounded-full object-fill"
+          />
+        </div>
+        <span className="font-bold text-[3rem] border-1 text-green-900 font-dm-serif">
+          AgriVerse
+        </span>
+      </Link>
+
       <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md">
         <h1 className="text-4xl font-extrabold text-green-700 mb-8 text-center drop-shadow-md">
           Create Account
