@@ -122,7 +122,7 @@ const Navbar = () => {
       {/* Left: Logo */}
       <Link to="/" className="flex items-center gap-2">
         <img
-          src="logo.jpg"
+          src="/assets/logo.jpg"
           alt="logo"
           className="w-10 h-10 rounded-full border border-green-300 object-cover"
         />

@@ -46,7 +46,7 @@ const Index = () => {
       <section
         className="flex-1 flex flex-col items-center justify-center px-6 py-20 relative text-center"
         style={{
-          backgroundImage: `url('background.jpg')`,
+          backgroundImage: `url('/assets/background.jpg')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -56,7 +56,7 @@ const Index = () => {
         <div className="relative z-10 max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-6 max-h-[500px]">
             <img
-              src="logo.jpg"
+              src="/assets/logo.jpg"
               alt="AgriVerse Logo"
               className="w-16 h-16 rounded-full object-cover border-4 border-green-700 shadow-lg"
             />

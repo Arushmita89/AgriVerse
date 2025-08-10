@@ -115,7 +115,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             <Link to="/" className="flex items-center gap-2 border-green-900">
               <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
                 <img
-                  src="logo.jpg"
+                  src="/assets/logo.jpg"
                   alt="logo"
                   className="w-full h-full justify-center object-center border border-green-900 rounded-full object-fill"
                 />
