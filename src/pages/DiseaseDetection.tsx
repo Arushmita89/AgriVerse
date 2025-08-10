@@ -135,7 +135,7 @@ const DiseaseDetection = () => {
         {/* Upload Section */}
         <Card
           className={`rounded-xl border-2 shadow-md transition-colors duration-300 cursor-pointer
-            ${isDragOver ? "border-green-700 bg-green-50 shadow-xl" : "border-green-300 bg-white"}
+            ${isDragOver ? "border-green-700 bg-green-50 shadow-xl" : "border-green-700 bg-white"}
           `}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -196,7 +196,7 @@ const DiseaseDetection = () => {
                   style={{ display: "none" }}
                   onChange={handleFileInput}
                 />
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="lg" className="border border-green-700 border-dashed text-green-700">
                   Select Image
                 </Button>
               </>

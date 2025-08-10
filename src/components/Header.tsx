@@ -1,6 +1,7 @@
 import { Bell, Menu, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -8,6 +9,8 @@ interface HeaderProps {
 }
 
 const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
+  const navigate = useNavigate();
+
   const handleNotificationClick = () => {
     toast({
       title: "Notifications",
@@ -18,7 +21,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
   return (
     <header className="border-b bg-white p-4 flex items-center justify-between">
       <div className="flex items-center">
-        {/* Sidebar toggle button - visible on all screens */}
+        {/* Sidebar toggle button */}
         <Button
           variant="ghost"
           size="icon"
@@ -33,10 +36,13 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
       </div>
 
       <div className="flex items-center space-x-2">
+        {/* Notification button */}
         <Button variant="ghost" size="icon" onClick={handleNotificationClick}>
           <Bell className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon">
+
+        {/* User icon button navigates to login page */}
+        <Button variant="ghost" size="icon" onClick={() => navigate("/login")}>
           <User className="h-5 w-5" />
         </Button>
       </div>

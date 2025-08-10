@@ -91,7 +91,7 @@ const Dashboard = () => {
   const averageHealthScore = 85; // TODO: dynamic value
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-6 py-8 font-inter text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-6 py-8 font-inter text-gray-800 m-0">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-10 font-poppins text-green-900 gap-4 select-none">
         <h1 className="text-4xl font-extrabold tracking-wide drop-shadow-md">

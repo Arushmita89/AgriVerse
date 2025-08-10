@@ -45,7 +45,6 @@ const Index = () => {
           backgroundPosition: 'center',
         }}
       >
-        {/* Glassmorphism overlay */}
         <div className="absolute inset-0 bg-white bg-opacity-10 backdrop-blur-[2px] rounded-b-3xl pointer-events-none"></div>
 
         <div className="relative z-10 max-w-4xl">
@@ -83,7 +82,7 @@ const Index = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-green-300 text-green-200 hover:bg-green-700 hover:text-white hover:shadow-lg transition-all duration-300"
+                className="border-green-300 text-green-600 hover:bg-green-700 hover:text-white hover:shadow-lg transition-all duration-300"
                 asChild
               >
                 <Link to="/dashboard">View Dashboard</Link>
