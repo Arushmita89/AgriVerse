@@ -1,4 +1,4 @@
-import { Bell, Menu, User, ArrowRight } from "lucide-react";
+import { Bell, Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +20,8 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
 
   return (
     <header className="border-b bg-white p-4 flex items-center justify-between">
+      {/* Left: Sidebar toggle + title */}
       <div className="flex items-center">
-        {/* Sidebar toggle button */}
         <Button
           variant="ghost"
           size="icon"
@@ -32,18 +32,31 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
           {sidebarOpen ? <ArrowRight className="rotate-180" /> : <Menu />}
         </Button>
 
-        <h1 className="text-lg font-semibold text-green-900 font-dm-serif">AgriVerse</h1>
+        <h1 className="text-lg font-semibold text-green-900 font-dm-serif">
+          AgriVerse
+        </h1>
       </div>
 
-      <div className="flex items-center space-x-2">
-        {/* Notification button */}
+      {/* Right: Notifications + Auth buttons */}
+      <div className="flex items-center space-x-3">
         <Button variant="ghost" size="icon" onClick={handleNotificationClick}>
           <Bell className="h-5 w-5" />
         </Button>
 
-        {/* User icon button navigates to login page */}
-        <Button variant="ghost" size="icon" onClick={() => navigate("/login")}>
-          <User className="h-5 w-5" />
+        <Button
+          variant="outline"
+          onClick={() => navigate("/login")}
+          className="text-blue-600 border-blue-600 hover:bg-blue-50"
+        >
+          Login
+        </Button>
+
+        <Button
+          variant="default"
+          onClick={() => navigate("/signup")}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          Sign Up
         </Button>
       </div>
     </header>

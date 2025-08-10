@@ -1,10 +1,10 @@
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage: React.FC = () => {
+const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,25 +22,20 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const token = await userCredential.user.getIdToken();
-
-      // Save token for future requests
-      localStorage.setItem("token", token);
-
-      setSuccess("Login successful! Redirecting...");
+      await createUserWithEmailAndPassword(auth, email, password);
+      setSuccess("Account created successfully! Redirecting...");
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      setError(err.message || "Failed to sign up");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <div className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm text-center">
@@ -57,20 +52,20 @@ const LoginPage: React.FC = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password (min 6 chars)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
           >
-            Log In
+            Sign Up
           </button>
         </form>
       </div>
@@ -90,4 +85,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

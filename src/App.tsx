@@ -11,7 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import DiseaseDetection from "./pages/DiseaseDetection";
 import DiseasePrediction from "./pages/DiseasePrediction";
 import DiseaseLibrary from "./pages/DiseaseLibrary";
-
+import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage"; 
 
 const queryClient = new QueryClient();
@@ -25,6 +25,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/detection" element={<DiseaseDetection />} />
