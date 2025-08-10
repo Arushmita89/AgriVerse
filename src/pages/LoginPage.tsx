@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -25,9 +24,7 @@ const LoginPage: React.FC = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const token = await userCredential.user.getIdToken();
 
-      // Save token for future requests
       localStorage.setItem("token", token);
-
       setSuccess("Login successful! Redirecting...");
       setTimeout(() => {
         navigate("/dashboard");
@@ -38,37 +35,37 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-200 via-green-300 to-green-400 px-4">
+      <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md">
+        <h1 className="text-4xl font-extrabold text-green-700 mb-6 text-center">Welcome Back</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm text-center">
+            <div className="bg-red-100 text-red-700 px-4 py-3 rounded text-center font-semibold">
               {error}
             </div>
           )}
           {success && (
-            <div className="bg-green-100 text-green-700 px-4 py-2 rounded text-sm text-center animate-fadeIn">
+            <div className="bg-green-100 text-green-700 px-4 py-3 rounded text-center font-semibold animate-fadeIn">
               {success}
             </div>
           )}
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-green-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-green-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold transition"
           >
             Log In
           </button>

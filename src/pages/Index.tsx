@@ -1,7 +1,7 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { motion } from "framer-motion";
 
@@ -12,6 +12,12 @@ const cardVariants = {
 };
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  const handleNotificationClick = () => {
+    alert("No new notifications yet!");
+  };
+
   const features = [
     {
       title: "Disease Detection",
@@ -41,8 +47,8 @@ const Index = () => {
         className="flex-1 flex flex-col items-center justify-center px-6 py-20 relative text-center"
         style={{
           backgroundImage: `url('background.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="absolute inset-0 bg-white bg-opacity-10 backdrop-blur-[2px] rounded-b-3xl pointer-events-none"></div>
@@ -92,7 +98,6 @@ const Index = () => {
         </div>
       </section>
 
-
       <section className="py-20 px-6 bg-gradient-to-t from-white/80 via-white/50 to-white/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-center mb-16">
@@ -102,9 +107,6 @@ const Index = () => {
               <span className="mt-5 absolute top-6 bottom-0 left-0 h-1 w-0 bg-green-400 transition-all duration-500 ease-in-out group-hover:w-full"></span>
             </h2>
           </div>
-
-
-
 
           <motion.div
             className="grid md:grid-cols-3 gap-10"

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,18 +11,52 @@ import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, XCircle, Loader2 } from "lucide-react";
 
+import { auth, db } from "../firebaseConfig"; 
+import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+
 const DiseaseDetection = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [predictionResult, setPredictionResult] = useState<string | null>(null);
   const [advice, setAdvice] = useState<string | null>(null);
-  const [scanCount, setScanCount] = useState(() => {
-    const saved = localStorage.getItem("scanCount");
-    return saved ? Number(saved) : 0;
-  });
+  const [scanCount, setScanCount] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch scanCount from Firestore (or localStorage fallback) on mount
+  useEffect(() => {
+    const fetchScanCount = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        // No user logged in, fallback to localStorage
+        const saved = localStorage.getItem("scanCount");
+        setScanCount(saved ? Number(saved) : 0);
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+          setScanCount(data.scanCount ?? 0);
+        } else {
+          // If no document, initialize scanCount
+          await setDoc(userDocRef, { scanCount: 0 });
+          setScanCount(0);
+        }
+      } catch (error) {
+        console.error("Failed to fetch scan count:", error);
+        // fallback localStorage
+        const saved = localStorage.getItem("scanCount");
+        setScanCount(saved ? Number(saved) : 0);
+      }
+    };
+
+    fetchScanCount();
+  }, []);
 
   const addDetectionToHistory = (result: string, isHealthy: boolean) => {
     const existingHistory = localStorage.getItem("detectionHistory");
@@ -83,6 +117,7 @@ const DiseaseDetection = () => {
     setIsAnalyzing(true);
 
     try {
+      // Fetch image blob from base64 string
       const response = await fetch(uploadedImage);
       const blob = await response.blob();
 
@@ -108,11 +143,21 @@ const DiseaseDetection = () => {
         data.prediction.toLowerCase().includes("healthy")
       );
 
-      setScanCount((prev) => {
-        const newCount = prev + 1;
-        localStorage.setItem("scanCount", newCount.toString());
-        return newCount;
-      });
+      // Update scanCount in Firestore or localStorage
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const newCount = scanCount + 1;
+        await updateDoc(userDocRef, { scanCount: newCount });
+        setScanCount(newCount);
+      } else {
+        // Fallback to localStorage
+        setScanCount((prev) => {
+          const newCount = prev + 1;
+          localStorage.setItem("scanCount", newCount.toString());
+          return newCount;
+        });
+      }
     } catch (error) {
       console.error(error);
       toast({
@@ -135,7 +180,11 @@ const DiseaseDetection = () => {
         {/* Upload Section */}
         <Card
           className={`rounded-xl border-2 shadow-md transition-colors duration-300 cursor-pointer
-            ${isDragOver ? "border-green-700 bg-green-50 shadow-xl" : "border-green-700 bg-white"}
+            ${
+              isDragOver
+                ? "border-green-700 bg-green-50 shadow-xl"
+                : "border-green-700 bg-white"
+            }
           `}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -196,7 +245,11 @@ const DiseaseDetection = () => {
                   style={{ display: "none" }}
                   onChange={handleFileInput}
                 />
-                <Button variant="outline" size="lg" className="border border-green-700 border-dashed text-green-700">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border border-green-700 border-dashed text-green-700"
+                >
                   Select Image
                 </Button>
               </>

@@ -46,7 +46,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
         <Button
           variant="outline"
           onClick={() => navigate("/login")}
-          className="text-blue-600 border-blue-600 hover:bg-blue-50"
+          className="text-green-600 border-green-600 hover:bg-green-50"
         >
           Login
         </Button>

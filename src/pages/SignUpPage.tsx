@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
@@ -33,37 +32,39 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-200 via-green-300 to-green-400 px-4">
+      <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md">
+        <h1 className="text-4xl font-extrabold text-green-700 mb-8 text-center drop-shadow-md">
+          Create Account
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm text-center">
+            <div className="bg-red-100 text-red-700 px-5 py-3 rounded-lg text-center font-semibold shadow-inner shadow-red-300">
               {error}
             </div>
           )}
           {success && (
-            <div className="bg-green-100 text-green-700 px-4 py-2 rounded text-sm text-center animate-fadeIn">
+            <div className="bg-green-100 text-green-700 px-5 py-3 rounded-lg text-center font-semibold animate-fadeIn shadow-inner shadow-green-300">
               {success}
             </div>
           )}
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full border border-green-400 rounded-xl px-5 py-3 text-gray-700 placeholder-green-500 focus:outline-none focus:ring-4 focus:ring-green-500 focus:border-green-600 transition"
           />
           <input
             type="password"
-            placeholder="Password (min 6 chars)"
+            placeholder="Password (min 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full border border-green-400 rounded-xl px-5 py-3 text-gray-700 placeholder-green-500 focus:outline-none focus:ring-4 focus:ring-green-500 focus:border-green-600 transition"
           />
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-extrabold text-lg tracking-wide shadow-lg shadow-green-400/40 transition-transform hover:scale-[1.03]"
           >
             Sign Up
           </button>
@@ -73,11 +74,11 @@ const SignUpPage: React.FC = () => {
       <style>
         {`
           @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
+            from { opacity: 0; transform: translateY(-6px); }
             to { opacity: 1; transform: translateY(0); }
           }
           .animate-fadeIn {
-            animation: fadeIn 0.4s ease-out forwards;
+            animation: fadeIn 0.5s ease-out forwards;
           }
         `}
       </style>
