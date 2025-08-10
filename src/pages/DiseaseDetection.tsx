@@ -126,7 +126,7 @@ const DiseaseDetection = () => {
       const formData = new FormData();
       formData.append("file", blob, "uploaded_image.jpg");
 
-      const res = await fetch("http://192.168.1.100:5000/predict", {
+      const res = await fetch("https://agriverse-production.up.railway.app/predict", {
         method: "POST",
         body: formData,
       });
