@@ -20,4 +20,4 @@ React, TypeScript, Tailwind CSS for frontend; Python, Flask for backend; TensorF
 ## Usage
 Users can open the frontend application in their browser, upload clear images of affected plant leaves, which are sent to the backend AI model for analysis. The platform returns disease diagnosis along with helpful information and treatment recommendations.
 
-*Developed by Arushmita Sikder*
+*Developed by Dynamo*
