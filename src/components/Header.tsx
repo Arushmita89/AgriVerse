@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { auth } from "../firebaseConfig"; // adjust path if needed
+import { auth } from "../firebaseConfig";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 
 interface HeaderProps {
@@ -16,11 +16,9 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -39,7 +37,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
         description: "You have successfully logged out.",
       });
       navigate("/login");
-    } catch (error) {
+    } catch {
       toast({
         title: "Logout failed",
         description: "An error occurred during logout.",
@@ -50,7 +48,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
 
   return (
     <header className="border-b bg-white p-4 flex items-center justify-between">
-      {/* Left: Sidebar */}
+      {/* Left: Sidebar toggle + Logo */}
       <div className="flex items-center">
         <Button
           variant="ghost"

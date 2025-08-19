@@ -90,11 +90,11 @@ const DiseaseLibrary = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8 font-poppins text-gray-900">
-      <h1 className="text-4xl font-extrabold mb-8 text-green-800 drop-shadow-md">🌿 Disease Library</h1>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 font-poppins text-gray-900">
+      <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-green-800 drop-shadow-md">🌿 Disease Library</h1>
 
       {/* Search Input */}
-      <div className="relative mb-10 max-w-md mx-auto md:mx-0">
+      <div className="relative mb-8 max-w-md mx-auto md:mx-0">
         <Search className="absolute top-3 left-3 text-green-600" />
         <input
           type="text"
@@ -105,11 +105,11 @@ const DiseaseLibrary = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 min-h-[600px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 min-h-[600px]">
         {/* Disease List */}
         <div className="overflow-y-auto max-h-[600px] space-y-3 scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100">
           {filteredDiseases.length === 0 && (
-            <div className="text-center p-8 rounded-lg border-2 border-green-200 bg-green-50 text-green-700 font-semibold shadow-inner">
+            <div className="text-center p-6 rounded-lg border-2 border-green-200 bg-green-50 text-green-700 font-semibold shadow-inner">
               No diseases found matching <span className="italic">"{searchTerm}"</span>
             </div>
           )}
@@ -159,17 +159,17 @@ const DiseaseLibrary = () => {
               >
                 <Card className="rounded-2xl border-2 border-green-400 shadow-lg bg-white p-6">
                   <CardHeader>
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
-                        <CardTitle className="text-3xl font-extrabold text-green-900">
+                        <CardTitle className="text-2xl sm:text-3xl font-extrabold text-green-900">
                           {selectedDisease.name}
                         </CardTitle>
-                        <CardDescription className="text-green-700 italic mt-1 text-lg font-medium">
+                        <CardDescription className="text-green-700 italic mt-1 text-md sm:text-lg font-medium">
                           {selectedDisease.scientificName} • Affects {selectedDisease.crop}
                         </CardDescription>
                       </div>
                       <Badge
-                        className={`uppercase tracking-wide font-bold px-5 py-2 rounded-3xl shadow-lg text-lg ${
+                        className={`uppercase tracking-wide font-bold px-4 py-2 rounded-3xl shadow-lg text-md sm:text-lg ${
                           severityColors[selectedDisease.severity as keyof typeof severityColors] ||
                           "bg-gray-300 text-gray-900"
                         }`}
@@ -178,19 +178,19 @@ const DiseaseLibrary = () => {
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-8 text-green-900 font-semibold text-lg leading-relaxed">
+                  <CardContent className="space-y-6 sm:space-y-8 text-green-900 font-medium text-md sm:text-lg leading-relaxed">
                     <section>
-                      <h3 className="text-2xl font-bold mb-3">Symptoms</h3>
+                      <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Symptoms</h3>
                       <p>{selectedDisease.symptoms}</p>
                     </section>
                     <section>
-                      <h3 className="text-2xl font-bold mb-3">Treatment</h3>
+                      <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Treatment</h3>
                       <p>{selectedDisease.treatment}</p>
                     </section>
                     <div className="pt-4">
                       <Button
                         variant="default"
-                        className="bg-green-700 hover:bg-green-800 text-white font-semibold text-lg shadow-lg"
+                        className="bg-green-700 hover:bg-green-800 text-white font-semibold text-md sm:text-lg shadow-lg"
                         onClick={() => alert("Detailed guide coming soon!")}
                       >
                         View Detailed Guide
@@ -206,10 +206,10 @@ const DiseaseLibrary = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="flex flex-col items-center justify-center h-full min-h-[320px] border-2 border-green-200 rounded-2xl bg-green-50 shadow-inner p-12 text-green-700 font-semibold"
+                className="flex flex-col items-center justify-center h-full min-h-[320px] border-2 border-green-200 rounded-2xl bg-green-50 shadow-inner p-8 sm:p-12 text-green-700 font-semibold"
               >
-                <Bug className="w-20 h-20 mb-5 drop-shadow-lg" />
-                <h3 className="text-2xl font-extrabold mb-3">Select a Disease</h3>
+                <Bug className="w-16 sm:w-20 h-16 sm:h-20 mb-5 drop-shadow-lg" />
+                <h3 className="text-xl sm:text-2xl font-extrabold mb-3">Select a Disease</h3>
                 <p className="max-w-md text-center font-medium text-green-800">
                   Choose a disease from the list to view detailed information and treatment options.
                 </p>

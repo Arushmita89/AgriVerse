@@ -8,7 +8,13 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Thermometer, Droplet, CloudRain, AlertTriangle, CheckCircle2 } from "lucide-react";
+import {
+  Thermometer,
+  Droplet,
+  CloudRain,
+  AlertTriangle,
+  CheckCircle2,
+} from "lucide-react";
 
 interface WeatherData {
   temperature: number | null;
@@ -73,8 +79,8 @@ const DiseasePrediction = () => {
   }, []);
 
   return (
-    <div className="space-y-8 p-6 max-w-5xl mx-auto bg-gradient-to-tr from-green-50 to-green-100 rounded-xl shadow-lg">
-      <h1 className="text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md mb-6">
+    <div className="p-4 sm:p-6 md:p-8 max-w-6xl mx-auto bg-gradient-to-tr from-green-50 to-green-100 rounded-xl shadow-lg space-y-8">
+      <h1 className="text-3xl sm:text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md">
         Disease Prediction Dashboard
       </h1>
 
@@ -90,8 +96,9 @@ const DiseasePrediction = () => {
 
       {!loading && !error && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="hover:scale-105 transition-transform shadow-md border-green-300 border-2">
+          {/* Weather Metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-green-300">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <Thermometer className="text-red-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-red-600">
@@ -99,16 +106,16 @@ const DiseasePrediction = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-5xl font-extrabold text-red-700">
+                <p className="text-4xl sm:text-5xl font-extrabold text-red-700">
                   {weather.temperature?.toFixed(1)}°C
                 </p>
-                <p className="text-sm font-medium text-red-400 mt-1">
+                <p className="text-sm sm:text-base font-medium text-red-400 mt-1">
                   Ideal range: 20-26°C
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="hover:scale-105 transition-transform shadow-md border-amber-300 border-2">
+            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-amber-300">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <Droplet className="text-amber-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-amber-600">
@@ -116,11 +123,11 @@ const DiseasePrediction = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-5xl font-extrabold text-amber-700">
+                <p className="text-4xl sm:text-5xl font-extrabold text-amber-700">
                   {weather.humidity}%
                 </p>
                 <p
-                  className={`text-sm font-medium mt-1 ${
+                  className={`text-sm sm:text-base font-medium mt-1 ${
                     weather.humidity && weather.humidity > 70
                       ? "text-amber-600 font-bold"
                       : "text-amber-400"
@@ -133,7 +140,7 @@ const DiseasePrediction = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:scale-105 transition-transform shadow-md border-blue-300 border-2">
+            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-blue-300">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <CloudRain className="text-blue-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-blue-600">
@@ -141,21 +148,22 @@ const DiseasePrediction = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-5xl font-extrabold text-blue-700">
+                <p className="text-4xl sm:text-5xl font-extrabold text-blue-700">
                   {weather.rainfall} mm
                 </p>
-                <p className="text-sm font-medium text-blue-400 mt-1">
+                <p className="text-sm sm:text-base font-medium text-blue-400 mt-1">
                   Last 1 hour
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-            <Card className="bg-amber-50 border-amber-300 border-2 shadow-lg">
+          {/* Alerts & Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mt-6">
+            <Card className="bg-amber-50 border-2 border-amber-300 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl font-bold text-amber-700 flex items-center gap-2">
-                  <AlertTriangle className="w-6 h-6" />
+                <CardTitle className="text-xl sm:text-2xl font-bold text-amber-700 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
                   Risk Alerts
                 </CardTitle>
                 <CardDescription className="text-amber-600">
@@ -163,7 +171,7 @@ const DiseasePrediction = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-5">
+                <div className="space-y-4 sm:space-y-5">
                   {weather.humidity && weather.humidity > 70 && (
                     <Alert className="border-amber-300 bg-amber-100 shadow-md rounded-md">
                       <AlertTitle className="text-amber-800 font-semibold">
@@ -191,10 +199,10 @@ const DiseasePrediction = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-green-50 border-green-300 border-2 shadow-lg">
+            <Card className="bg-green-50 border-2 border-green-300 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl font-bold text-green-700 flex items-center gap-2">
-                  <CheckCircle2 className="w-6 h-6" />
+                <CardTitle className="text-xl sm:text-2xl font-bold text-green-700 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
                   Recommended Actions
                 </CardTitle>
                 <CardDescription className="text-green-600">
@@ -202,8 +210,8 @@ const DiseasePrediction = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <Badge variant="destructive" className="font-semibold">
                       High Priority
                     </Badge>
@@ -211,12 +219,13 @@ const DiseasePrediction = () => {
                       <p className="font-semibold text-green-800">
                         Apply fungicide treatment
                       </p>
-                      <p className="text-sm text-green-600">
+                      <p className="text-sm sm:text-base text-green-600">
                         Recommended for northern fields within 48 hours
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
+
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <Badge variant="secondary" className="font-semibold">
                       Medium Priority
                     </Badge>
@@ -224,20 +233,24 @@ const DiseasePrediction = () => {
                       <p className="font-semibold text-green-800">
                         Increase airflow in greenhouse
                       </p>
-                      <p className="text-sm text-green-600">
+                      <p className="text-sm sm:text-base text-green-600">
                         Reduce humidity levels to prevent mildew formation
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <Badge variant="outline" className="font-semibold text-green-700">
+
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <Badge
+                      variant="outline"
+                      className="font-semibold text-green-700"
+                    >
                       Low Priority
                     </Badge>
                     <div>
                       <p className="font-semibold text-green-800">
                         Monitor western fields
                       </p>
-                      <p className="text-sm text-green-600">
+                      <p className="text-sm sm:text-base text-green-600">
                         Continue regular observation for early signs
                       </p>
                     </div>
