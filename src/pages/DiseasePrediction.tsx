@@ -41,7 +41,7 @@ const DiseasePrediction = () => {
 
   const fetchWeather = async (lat: number, lon: number) => {
     try {
-      const apiKey = "4a53fa6493a16955995fcc2fe189256d"; // your API key
+      const apiKey = "4a53fa6493a16955995fcc2fe189256d";
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch weather data");
@@ -79,9 +79,9 @@ const DiseasePrediction = () => {
   }, []);
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 max-w-6xl mx-auto bg-gradient-to-tr from-green-50 to-green-100 rounded-xl shadow-lg space-y-8">
-      <h1 className="text-3xl sm:text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md">
-        Disease Prediction Dashboard
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-12 py-6 sm:py-8 font-poppins text-gray-900">
+      <h1 className="text-3xl sm:text-4xl font-extrabold text-green-900 text-center drop-shadow-md mb-8">
+        🌿 Disease Prediction Dashboard
       </h1>
 
       {loading && (
@@ -98,7 +98,8 @@ const DiseasePrediction = () => {
         <>
           {/* Weather Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-green-300">
+            {/** Temperature Card **/}
+            <Card className="rounded-3xl shadow-lg border-2 border-red-300 hover:scale-105 transition-transform">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <Thermometer className="text-red-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-red-600">
@@ -115,7 +116,8 @@ const DiseasePrediction = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-amber-300">
+            {/** Humidity Card **/}
+            <Card className="rounded-3xl shadow-lg border-2 border-amber-300 hover:scale-105 transition-transform">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <Droplet className="text-amber-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-amber-600">
@@ -140,7 +142,8 @@ const DiseasePrediction = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:scale-105 transition-transform shadow-md border-2 border-blue-300">
+            {/** Rainfall Card **/}
+            <Card className="rounded-3xl shadow-lg border-2 border-blue-300 hover:scale-105 transition-transform">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <CloudRain className="text-blue-500 w-6 h-6" />
                 <CardTitle className="text-lg font-semibold text-blue-600">
@@ -158,9 +161,10 @@ const DiseasePrediction = () => {
             </Card>
           </div>
 
-          {/* Alerts & Actions */}
+          {/* Alerts & Recommended Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mt-6">
-            <Card className="bg-amber-50 border-2 border-amber-300 shadow-lg">
+            {/** Risk Alerts **/}
+            <Card className="rounded-3xl shadow-lg border-2 border-amber-300 bg-amber-50">
               <CardHeader>
                 <CardTitle className="text-xl sm:text-2xl font-bold text-amber-700 flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -173,7 +177,7 @@ const DiseasePrediction = () => {
               <CardContent>
                 <div className="space-y-4 sm:space-y-5">
                   {weather.humidity && weather.humidity > 70 && (
-                    <Alert className="border-amber-300 bg-amber-100 shadow-md rounded-md">
+                    <Alert className="border-amber-300 bg-amber-100 shadow-md rounded-2xl">
                       <AlertTitle className="text-amber-800 font-semibold">
                         Blight Risk Elevated
                       </AlertTitle>
@@ -185,7 +189,7 @@ const DiseasePrediction = () => {
                   )}
                   {weather.temperature &&
                     (weather.temperature < 20 || weather.temperature > 26) && (
-                      <Alert className="border-green-300 bg-green-100 shadow-md rounded-md">
+                      <Alert className="border-green-300 bg-green-100 shadow-md rounded-2xl">
                         <AlertTitle className="text-green-800 font-semibold">
                           Rust Risk Low
                         </AlertTitle>
@@ -199,7 +203,8 @@ const DiseasePrediction = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-green-50 border-2 border-green-300 shadow-lg">
+            {/** Recommended Actions **/}
+            <Card className="rounded-3xl shadow-lg border-2 border-green-300 bg-green-50">
               <CardHeader>
                 <CardTitle className="text-xl sm:text-2xl font-bold text-green-700 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />

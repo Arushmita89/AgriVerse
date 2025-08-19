@@ -90,8 +90,10 @@ const DiseaseLibrary = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 font-poppins text-gray-900">
-      <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-green-800 drop-shadow-md">🌿 Disease Library</h1>
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-12 py-6 sm:py-8 font-poppins text-gray-900">
+      <h1 className="text-3xl sm:text-4xl font-extrabold mb-8 text-green-800 drop-shadow-md text-center">
+        🌿 Disease Library
+      </h1>
 
       {/* Search Input */}
       <div className="relative mb-8 max-w-md mx-auto md:mx-0">
@@ -99,7 +101,7 @@ const DiseaseLibrary = () => {
         <input
           type="text"
           placeholder="Search diseases by name or crop..."
-          className="w-full pl-10 pr-4 py-3 rounded-xl border border-green-300 focus:ring-4 focus:ring-green-400 focus:outline-none shadow-md placeholder-green-400 text-green-900 font-medium"
+          className="w-full pl-10 pr-4 py-3 rounded-2xl border border-green-300 focus:ring-4 focus:ring-green-400 focus:outline-none shadow-md placeholder-green-400 text-green-900 font-medium"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -107,9 +109,9 @@ const DiseaseLibrary = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 min-h-[600px]">
         {/* Disease List */}
-        <div className="overflow-y-auto max-h-[600px] space-y-3 scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100">
+        <div className="overflow-y-auto max-h-[600px] space-y-3 scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100 rounded-3xl p-2">
           {filteredDiseases.length === 0 && (
-            <div className="text-center p-6 rounded-lg border-2 border-green-200 bg-green-50 text-green-700 font-semibold shadow-inner">
+            <div className="text-center p-6 rounded-3xl border-2 border-green-200 bg-green-50 text-green-700 font-semibold shadow-inner">
               No diseases found matching <span className="italic">"{searchTerm}"</span>
             </div>
           )}
@@ -125,7 +127,7 @@ const DiseaseLibrary = () => {
                 scale: selectedDisease?.id === disease.id ? 1.03 : 1,
               }}
               transition={{ duration: 0.3 }}
-              className={`cursor-pointer rounded-xl p-4 shadow-md border ${
+              className={`cursor-pointer rounded-3xl p-4 shadow-md border ${
                 selectedDisease?.id === disease.id
                   ? "border-green-600 bg-green-100"
                   : "border-transparent hover:border-green-400 hover:bg-green-50"
@@ -157,7 +159,7 @@ const DiseaseLibrary = () => {
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.4 }}
               >
-                <Card className="rounded-2xl border-2 border-green-400 shadow-lg bg-white p-6">
+                <Card className="rounded-3xl border-2 border-green-400 shadow-lg bg-white p-6">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div>
@@ -206,7 +208,7 @@ const DiseaseLibrary = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="flex flex-col items-center justify-center h-full min-h-[320px] border-2 border-green-200 rounded-2xl bg-green-50 shadow-inner p-8 sm:p-12 text-green-700 font-semibold"
+                className="flex flex-col items-center justify-center h-full min-h-[320px] border-2 border-green-200 rounded-3xl bg-green-50 shadow-inner p-8 sm:p-12 text-green-700 font-semibold"
               >
                 <Bug className="w-16 sm:w-20 h-16 sm:h-20 mb-5 drop-shadow-lg" />
                 <h3 className="text-xl sm:text-2xl font-extrabold mb-3">Select a Disease</h3>

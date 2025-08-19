@@ -20,7 +20,7 @@ interface DetectionEntry {
 }
 
 const CircleProgress = ({
-  percentage = 85,
+  percentage = 0,
   size = 140,
   strokeWidth = 14,
 }: {
@@ -34,9 +34,10 @@ const CircleProgress = ({
 
   return (
     <svg
-      width={size}
-      height={size}
-      className="mx-auto drop-shadow-lg sm:w-36 sm:h-36"
+      width="100%"
+      height="auto"
+      viewBox={`0 0 ${size} ${size}`}
+      className="mx-auto sm:w-36 sm:h-36 w-32 h-32"
     >
       <circle
         stroke="rgba(34,197,94,0.2)"
@@ -78,7 +79,7 @@ const CircleProgress = ({
 const Dashboard = () => {
   const [activeScans, setActiveScans] = useState(0);
   const [detectionHistory, setDetectionHistory] = useState<DetectionEntry[]>([]);
-  const [averageHealthScore, setAverageHealthScore] = useState(85);
+  const [averageHealthScore, setAverageHealthScore] = useState(0);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -105,7 +106,6 @@ const Dashboard = () => {
 
         if (userDocSnap.exists()) {
           const data = userDocSnap.data();
-
           setActiveScans(data.scanCount ?? 0);
 
           const historyRaw = data.detectionHistory ?? [];
@@ -128,7 +128,6 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-
         const savedCount = localStorage.getItem("scanCount");
         setActiveScans(savedCount ? Number(savedCount) : 0);
 
@@ -165,10 +164,10 @@ const Dashboard = () => {
   const diseaseCount = detectionHistory.filter((d) => !d.isHealthy).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-12 py-6 sm:py-8 font-inter text-gray-800 m-0">
+    <div className="min-h-screen w-full bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-12 py-6 sm:py-8 font-inter text-gray-800">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 font-poppins text-green-900 gap-3 sm:gap-4 select-none text-center sm:text-left">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 font-poppins text-green-900 gap-3 sm:gap-4 text-center sm:text-left">
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-wide drop-shadow-md">
           🌿 Dashboard
         </h1>
@@ -182,17 +181,17 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10 w-full">
 
         {/* Active Scans */}
-        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }}>
-          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[280px] sm:min-h-[300px] text-white px-4 sm:px-6 py-6">
+        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }} className="w-full">
+          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[280px] sm:min-h-[300px] text-white px-4 py-6 w-full">
             <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="text-lg sm:text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg">
+              <CardTitle className="text-lg sm:text-xl font-semibold uppercase tracking-widest drop-shadow-lg">
                 Active Scans
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
+            <CardContent className="flex flex-col items-center w-full">
               <motion.div className="text-4xl sm:text-5xl font-extrabold drop-shadow-lg select-none">
                 {activeScans}
               </motion.div>
@@ -205,7 +204,7 @@ const Dashboard = () => {
                   style={{ filter: "drop-shadow(0 0 6px white)" }}
                 />
               </div>
-              <p className="text-xs sm:text-sm font-medium mt-2 sm:mt-3 tracking-wider drop-shadow-md select-none">
+              <p className="text-xs sm:text-sm font-medium mt-2 sm:mt-3 tracking-wider drop-shadow-md select-none text-center">
                 Scans completed successfully
               </p>
             </CardContent>
@@ -213,14 +212,14 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Disease Alerts */}
-        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }}>
-          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-amber-300 via-amber-400 to-amber-500 min-h-[280px] sm:min-h-[300px] text-white px-4 sm:px-6 py-6">
+        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }} className="w-full">
+          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-amber-300 via-amber-400 to-amber-500 min-h-[280px] sm:min-h-[300px] text-white px-4 py-6 w-full">
             <CardHeader className="pb-3 sm:pb-4">
-              <CardTitle className="text-lg sm:text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg">
+              <CardTitle className="text-lg sm:text-xl font-semibold uppercase tracking-widest drop-shadow-lg">
                 Disease Alerts
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
+            <CardContent className="flex flex-col items-center w-full">
               <motion.div className="text-4xl sm:text-5xl font-extrabold drop-shadow-lg select-none">
                 {diseaseCount}
               </motion.div>
@@ -233,7 +232,7 @@ const Dashboard = () => {
                   style={{ filter: "drop-shadow(0 0 6px white)" }}
                 />
               </div>
-              <p className="text-xs sm:text-sm font-medium mt-2 sm:mt-3 tracking-wider drop-shadow-md select-none">
+              <p className="text-xs sm:text-sm font-medium mt-2 sm:mt-3 tracking-wider drop-shadow-md select-none text-center">
                 Issues detected, immediate action required
               </p>
             </CardContent>
@@ -241,17 +240,17 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Average Health Score */}
-        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }}>
-          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[280px] sm:min-h-[300px] text-white px-4 sm:px-6 py-6">
+        <motion.div whileHover={{ scale: 1.06 }} transition={{ type: "spring", stiffness: 300 }} className="w-full">
+          <Card className="flex flex-col justify-around items-center text-center rounded-3xl border-0 shadow-xl bg-gradient-to-tr from-green-300 via-green-400 to-green-500 min-h-[280px] sm:min-h-[300px] text-white px-4 py-6 w-full">
             <CardHeader className="pb-3 sm:pb-6">
-              <CardTitle className="text-lg sm:text-[1.1rem] font-semibold uppercase tracking-widest drop-shadow-lg select-none">
+              <CardTitle className="text-lg sm:text-xl font-semibold uppercase tracking-widest drop-shadow-lg select-none">
                 Average Health Score
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center">
+            <CardContent className="flex flex-col items-center w-full">
               <CircleProgress percentage={averageHealthScore} />
               <motion.p
-                className="mt-3 sm:mt-4 text-sm sm:text-lg font-semibold drop-shadow-md select-none"
+                className="mt-3 sm:mt-4 text-sm sm:text-lg font-semibold drop-shadow-md select-none text-center"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -264,7 +263,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <Card className="rounded-3xl border border-gray-300 shadow-lg bg-white max-w-4xl mx-auto mb-10">
+      <Card className="rounded-3xl border border-gray-300 shadow-lg bg-white max-w-full sm:max-w-4xl mx-auto mb-10 px-2 sm:px-4">
         <CardHeader>
           <CardTitle className="font-poppins text-2xl sm:text-3xl font-extrabold text-gray-900 drop-shadow-sm select-none">
             📜 Recent Activity
@@ -274,7 +273,7 @@ const Dashboard = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4 max-h-[320px] sm:max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-100 rounded-md px-2 sm:px-4">
+          <div className="space-y-4 max-h-64 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-100 rounded-md">
             {detectionHistory.length === 0 ? (
               <p className="text-gray-500 font-inter select-none text-center py-12">
                 No recent detections yet.
@@ -289,7 +288,7 @@ const Dashboard = () => {
                   className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-200 pb-3 last:border-none"
                 >
                   <div className="mb-2 sm:mb-0">
-                    <p className="font-medium text-gray-900 font-poppins">{result}</p>
+                    <p className="font-medium text-gray-900 font-poppins break-words">{result}</p>
                     <p className="text-sm text-gray-500 font-inter">{formatDate(timestamp)}</p>
                   </div>
                   <Badge

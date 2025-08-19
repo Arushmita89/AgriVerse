@@ -1,7 +1,7 @@
 import { Bell, Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth } from "../firebaseConfig";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -60,9 +60,10 @@ const Header = ({ sidebarOpen, setSidebarOpen }: HeaderProps) => {
           {sidebarOpen ? <ArrowRight className="rotate-180" /> : <Menu />}
         </Button>
 
-        <h1 className="text-lg font-semibold text-green-900 font-dm-serif">
+        {/* AgriVerse text navigates to Index page */}
+        <Link to="/" className="text-2xl font-semibold text-green-900 font-dm-serif">
           AgriVerse
-        </h1>
+        </Link>
       </div>
 
       {/* Right: Notifications + Auth buttons */}

@@ -62,9 +62,14 @@ const Index = () => {
             </h1>
           </div>
 
-          <p className="w-full max-w-4xl mx-auto text-base sm:text-lg md:text-xl font-semibold text-white drop-shadow-md mb-10">
-            Advanced crop disease detection and prediction using artificial intelligence. Protect your crops with early identification and treatment recommendations.
-          </p>
+          <div className="relative w-full max-w-4xl mx-auto mb-10">
+  <div className="absolute inset-0 bg-black/25 rounded-lg"></div>
+  <p className="relative text-base sm:text-lg md:text-xl font-semibold text-white p-4">
+    Advanced crop disease detection and prediction using artificial intelligence. Protect your crops with early identification and treatment recommendations.
+  </p>
+</div>
+
+
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full">
             <motion.div

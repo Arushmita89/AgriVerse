@@ -5,12 +5,16 @@ import Sidebar from "./Sidebar";
 import { toast } from "@/hooks/use-toast";
 
 const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth >= 768; // Open by default on md and above
-    }
-    return true;
-  });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setSidebarOpen(true);
+      else setSidebarOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     toast({
@@ -24,7 +28,7 @@ const Layout = () => {
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-hidden m-0 p-0">
+        <main className="flex-1 md:p-6 overflow-hidden m-0 p-0">
           <Outlet />
         </main>
         <footer className="border-t p-4 text-center text-sm text-gray-500">

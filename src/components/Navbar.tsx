@@ -1,9 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Bell } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { auth } from "../firebaseConfig"; // adjust path if needed
+import { auth } from "../firebaseConfig";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 
 const routes = [
@@ -93,6 +93,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -109,30 +110,28 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      //alert("Logged out successfully.");
       navigate("/login");
     } catch (error) {
-      //alert("Logout failed.");
       console.error(error);
     }
   };
 
   return (
-    <nav className="w-full bg-green-900 text-white flex items-center justify-between px-16 py-3 space-x-10">
-      {/* Left: Logo */}
-      <Link to="/" className="flex items-center gap-2">
-        <img
-          src="/assets/logo.jpg"
-          alt="logo"
-          className="w-10 h-10 rounded-full border border-green-300 object-cover"
-        />
-        <span className="text-2xl justify-center items-center font-thin font-dm-serif">
-          AgriVerse
-        </span>
-      </Link>
+    <nav className="w-full bg-green-900 text-white flex items-center justify-between px-4 md:px-16 py-3 relative">
+      <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
+          <img
+            src="/assets/logo.jpg"
+            alt="logo"
+            className="w-10 h-10 rounded-full border border-green-300 object-cover"
+          />
+          <span className="text-2xl justify-center items-center font-thin font-dm-serif">
+            AgriVerse
+          </span>
+        </Link>
+      </div>
 
-      {/* Center: Routes */}
-      <div className="flex gap-4 ml-6">
+      <div className="hidden md:flex gap-4 ml-6">
         {routes.map((route) => {
           const isActive = location.pathname === route.path;
           return (
@@ -151,7 +150,6 @@ const Navbar = () => {
         })}
       </div>
 
-      {/* Right: Notifications + Auth Buttons */}
       <div className="flex items-center space-x-3">
         <Button variant="ghost" size="icon" onClick={handleNotificationClick}>
           <Bell className="h-5 w-5" />
@@ -161,7 +159,7 @@ const Navbar = () => {
           <>
             <Button
               variant="outline"
-              className="text-green-600 border-green-600 cursor-default"
+              className="text-green-600 border-green-600 cursor-default hidden md:inline-flex"
               disabled
             >
               {user.displayName || user.email}
@@ -193,7 +191,38 @@ const Navbar = () => {
             </Button>
           </>
         )}
+
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </Button>
       </div>
+
+      {menuOpen && (
+        <div className="absolute top-full left-0 w-full bg-green-900 flex flex-col md:hidden z-50">
+          {routes.map((route) => {
+            const isActive = location.pathname === route.path;
+            return (
+              <Link
+                key={route.path}
+                to={route.path}
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 transition-colors",
+                  isActive ? "bg-green-700" : "hover:bg-green-800"
+                )}
+              >
+                {route.icon("w-5 h-5")}
+                <span>{route.name}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </nav>
   );
 };

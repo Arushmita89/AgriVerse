@@ -180,20 +180,19 @@ const DiseaseDetection = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-12 py-8 bg-gradient-to-tr from-green-50 to-green-100 rounded-xl shadow-lg">
-      <h1 className="text-3xl sm:text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md mb-8">
-        Disease Detection
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-12 py-6 sm:py-8 font-inter text-gray-800">
+
+      <h1 className="text-3xl sm:text-4xl font-extrabold font-poppins text-green-900 text-center drop-shadow-md mb-6">
+        🌿 Disease Detection
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-full">
+
         {/* Upload Section */}
         <Card
-          className={`rounded-xl border-2 shadow-md transition-colors duration-300 cursor-pointer
-            ${
-              isDragOver
-                ? "border-green-700 bg-green-50 shadow-xl"
-                : "border-green-700 bg-white"
-            }
+          className={`rounded-3xl border-2 shadow-lg transition-colors duration-300 cursor-pointer
+            ${isDragOver ? "border-green-700 bg-green-50 shadow-xl" : "border-green-700 bg-white"}
+            w-full max-w-full
           `}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -207,24 +206,24 @@ const DiseaseDetection = () => {
             <CardTitle className="text-lg sm:text-xl font-semibold text-green-800 flex items-center gap-2">
               <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" /> Upload Plant Image
             </CardTitle>
-            <CardDescription className="text-green-600 sm:text-sm">
+            <CardDescription className="text-green-600 text-sm sm:text-base">
               Take or upload a clear photo of the affected plant part
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex flex-col items-center justify-center py-8 sm:py-12">
+          <CardContent className="flex flex-col items-center justify-center py-6 sm:py-8">
             {uploadedImage ? (
               <motion.div
                 key="image-uploaded"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="space-y-4 w-full"
+                className="space-y-3 w-full"
               >
                 <img
                   src={uploadedImage}
                   alt="Uploaded plant"
-                  className="max-h-60 sm:max-h-72 mx-auto rounded-md object-contain shadow-lg"
+                  className="max-h-60 mx-auto rounded-md object-contain shadow-lg"
                 />
                 <div className="flex justify-center">
                   <Button
@@ -235,7 +234,7 @@ const DiseaseDetection = () => {
                       setPredictionResult(null);
                       setAdvice(null);
                     }}
-                    className="flex items-center gap-2 text-sm sm:text-base"
+                    className="flex items-center gap-1 text-sm sm:text-base w-full sm:w-auto justify-center"
                   >
                     <XCircle />
                     Remove Image
@@ -244,7 +243,7 @@ const DiseaseDetection = () => {
               </motion.div>
             ) : (
               <>
-                <p className="text-center text-green-600 mb-4 select-none text-sm sm:text-base">
+                <p className="text-center text-green-600 mb-3 select-none text-sm sm:text-base">
                   Drag & drop an image here, or click to select
                 </p>
                 <input
@@ -266,7 +265,7 @@ const DiseaseDetection = () => {
           </CardContent>
 
           {uploadedImage && (
-            <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+            <div className="px-3 pb-3 sm:px-6 sm:pb-6 flex flex-col items-center justify-center">
               <Button
                 className="w-full sm:w-auto flex items-center justify-center gap-2"
                 disabled={isAnalyzing}
@@ -282,7 +281,7 @@ const DiseaseDetection = () => {
                   "Analyze Image"
                 )}
               </Button>
-              <p className="mt-3 text-center text-green-700 font-semibold select-none text-sm sm:text-base">
+              <p className="mt-2 text-center text-green-700 font-semibold select-none text-sm sm:text-base">
                 Scans done: {scanCount}
               </p>
             </div>
@@ -290,17 +289,17 @@ const DiseaseDetection = () => {
         </Card>
 
         {/* Results Section */}
-        <Card className="rounded-xl border-2 border-green-700 shadow-md bg-white flex flex-col">
+        <Card className="rounded-3xl border-2 border-green-700 shadow-lg bg-white flex flex-col w-full max-w-full">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl font-semibold text-green-800">
               Analysis Results
             </CardTitle>
-            <CardDescription className="text-green-600 sm:text-sm">
+            <CardDescription className="text-green-600 text-sm sm:text-base">
               Disease detection and treatment recommendations
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex flex-col justify-center items-center text-center py-16 sm:py-20 min-h-[240px] sm:min-h-[280px] px-2 sm:px-6">
+          <CardContent className="flex flex-col justify-center items-center text-center py-12 sm:py-16 min-h-[220px] sm:min-h-[280px] px-2 sm:px-6">
             <AnimatePresence mode="wait">
               {isAnalyzing ? (
                 <motion.div
@@ -308,11 +307,11 @@ const DiseaseDetection = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="animate-pulse space-y-4 w-full max-w-xs mx-auto"
+                  className="animate-pulse space-y-3 w-full max-w-xs mx-auto"
                 >
-                  <div className="h-6 bg-green-200 rounded w-3/4 mx-auto"></div>
-                  <div className="h-6 bg-green-200 rounded w-1/2 mx-auto"></div>
-                  <div className="h-6 bg-green-200 rounded w-2/3 mx-auto"></div>
+                  <div className="h-5 bg-green-200 rounded w-3/4 mx-auto"></div>
+                  <div className="h-5 bg-green-200 rounded w-1/2 mx-auto"></div>
+                  <div className="h-5 bg-green-200 rounded w-2/3 mx-auto"></div>
                 </motion.div>
               ) : uploadedImage ? (
                 <motion.div
@@ -330,10 +329,10 @@ const DiseaseDetection = () => {
                           : "#b91c1c"
                         : "#6b7280",
                       fontWeight: 700,
-                      fontSize: "1.875rem", // 30px
+                      fontSize: "1.5rem",
                       fontFamily: "'Poppins', sans-serif",
                     }}
-                    className="mb-4 text-base sm:text-xl"
+                    className="mb-3 text-base sm:text-xl"
                   >
                     {predictionResult ?? "No prediction yet"}
                   </h3>
