@@ -40,6 +40,10 @@ val_gen = datagen.flow_from_directory(
 with open('class_indices.json', 'w') as f:
     json.dump(train_gen.class_indices, f)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d3acf4abb920d73602bcb84e11fd6a8f0349309d
 base_model = MobileNetV2(input_shape=(IMG_SIZE, IMG_SIZE, 3),
                          include_top=False,
                          weights='imagenet')
